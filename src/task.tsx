@@ -4,15 +4,33 @@ import './task.css';
 export interface Task {
     title: string;
     description: string;
-    dueDate: Date;
+    dueDate: Date | null;
 }
 
-export default class TaskComponent extends React.Component<Task, any> {
+export default class TaskComponent extends React.Component<Task, Task> {
+   
+    shouldComponentUpdate(props: Task, state1: Task, state2: Task) {
+        console.log('You shouldn\'t update');
+        return false;
+    }
+
+    deleteDueDate = () => {
+        this.setState({...this.state, dueDate: null})
+    }
+
+    componentWillMount() {
+        this.state = {...this.props};
+    }
+
     render() {
+       
         return (<div className="container">
-        <div>{this.props.title}</div>
-        <div>{this.props.description}</div>
-        <div>{this.props.dueDate.toDateString()} {this.props.dueDate.toTimeString()}</div>
+        <div>{this.state.title}</div>
+        <div>{this.state.description}</div>
+        <div>{this.state.dueDate?.toDateString()} {this.state.dueDate?.toTimeString()}</div>
+        <div>
+            <button onClick={this.deleteDueDate} >Delete Due Date</button>
+        </div>
         </div>)
     }
 }
